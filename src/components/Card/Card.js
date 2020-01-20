@@ -1,18 +1,24 @@
 import React, { useState, useEffect } from 'react';
 import './Style.css';
-import AwesomeSlider from 'react-awesome-slider';
+import FsLightbox from 'fslightbox-react';
 import typeColors from '../../Helper/pokemonTypes';
 import 'react-awesome-slider/dist/styles.css';
 import { ByType } from '../../App';
 function Card({ pokemon }) {
+    const [toggler, setToggler] = useState(false);
     return (
         < div className="Card" key={pokemon.id}>
-            <AwesomeSlider bullets={false}>
-                <div data-src={pokemon.sprites.front_default} />
-                <div data-src={pokemon.sprites.back_default} />
-                <div data-src={pokemon.sprites.front_shiny} />
-                <div data-src={pokemon.sprites.back_shiny} />
-            </AwesomeSlider>
+            <img onClick={() => setToggler(!toggler)} src={pokemon.sprites.front_default} className="center" />
+            <FsLightbox
+                toggler={toggler}
+                sources={[
+                    `${pokemon.sprites.front_default}`,
+                    `${pokemon.sprites.back_default}`,
+                    `${pokemon.sprites.front_shiny}`,
+                    `${pokemon.sprites.back_shiny}`
+                ]}
+            />
+
             <div className="Card__name">
                 {pokemon.name}
             </div>
