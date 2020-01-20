@@ -3,10 +3,10 @@ import './Style.css';
 import AwesomeSlider from 'react-awesome-slider';
 import typeColors from '../../Helper/pokemonTypes';
 import 'react-awesome-slider/dist/styles.css';
-
+import { ByType } from '../../App';
 function Card({ pokemon }) {
     return (
-        < div className="Card" >
+        < div className="Card" key={pokemon.id}>
             <AwesomeSlider bullets={false}>
                 <div data-src={pokemon.sprites.front_default} />
                 <div data-src={pokemon.sprites.back_default} />
@@ -17,10 +17,10 @@ function Card({ pokemon }) {
                 {pokemon.name}
             </div>
             <div className="Card__types">
-                {pokemon.types.map(type => {
+                {pokemon.types.map((type, i) => {
                     return (
-                        <div className="Card__type" style={{ backgroundColor: typeColors[type.type.name] }}>
-                            <button >{type.type.name}</button>
+                        <div className="Card__type" key={i} style={{ backgroundColor: typeColors[type.type.name] }}>
+                            <button onClick={() => ByType(`${type.type.url}`)}> {type.type.name} </button>
                         </div>
                     )
                 })}
@@ -36,10 +36,10 @@ function Card({ pokemon }) {
                 </div>
                 <div className="Card__data Card__data__ability">
                     <p className="title"> Ability </p>
-                    {pokemon.abilities.map(ability => {
+                    {pokemon.abilities.map((ability, i) => {
                         return (
 
-                            <p className="Card__data__ability__info">
+                            <p className="Card__data__ability__info" key={i}>
                                 {' '}{ability.ability.name}
                             </p>
                         )

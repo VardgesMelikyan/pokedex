@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { getAllPokemon, getPokemon } from './services/pokemon';
+import { getAllPokemon, getPokemon, getType } from './services/pokemon';
 import Card from './components/Card';
 import Navbar from './components/Navbar';
 import Searchbar from './components/Searchbar';
 import logo from './logo.svg';
 import './App.css';
-
 function App() {
+  const [pokemonsType] = useState('');
   const [pokemonData, setPokemonData] = useState([]);
   const [nextUrl, setNextUrl] = useState('');
   const [prevUrl, setPrevUrl] = useState('');
@@ -19,7 +19,7 @@ function App() {
       let response = await getAllPokemon(initialUrl);
       setNextUrl(response.next);
       setPrevUrl(response.previus);
-      console.log(response);
+      // console.log(response);
       await loadingPokemon(response.results);
       setLoading(false);
     }
@@ -54,14 +54,6 @@ function App() {
     }))
     setPokemonData(_pokemon)
   }
-  const byType = async (data) => {
-    console.log('ok')
-    // setLoading(true);
-    // let data = await getPokemon(url);
-    // await loadingPokemon(data.results);
-    // setLoading(false);
-  }
-
   return (
     <div>
       {loading ? <h1>Loading...</h1> : (
@@ -74,7 +66,7 @@ function App() {
           </div>
           <div className="grid-container">
             {pokemonData.map((pokemon, i) => {
-              return <Card key={i} pokemon={pokemon} />
+              return <Card key={pokemon.id} pokemon={pokemon} />
             })}
           </div>
         </>
@@ -82,5 +74,9 @@ function App() {
     </div>
   );
 }
+const ByType = async (data) => {
+  let response = await getType(data)
 
+}
+export { ByType };
 export default App;
