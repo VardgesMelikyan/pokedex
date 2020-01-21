@@ -5,7 +5,6 @@ import Navbar from './components/Navbar';
 import Searchbar from './components/Searchbar';
 import logo from './logo.svg';
 import './App.css';
-const [pokemonsType] = useState('');
 function App() {
   const [pokemonsType] = useState('');
   const [pokemonData, setPokemonData] = useState([]);
