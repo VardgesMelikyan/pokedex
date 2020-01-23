@@ -7,20 +7,21 @@ import logo from './logo.svg';
 import './App.css';
 function App() {
   const [pokemonsType] = useState('');
-  const [pokemonData, setPokemonData] = useState([]);
+  const [pokemonData, setPokemonData] = useState('');
+  const [pokemonsData, setPokemonsData] = useState([]);
   const [nextUrl, setNextUrl] = useState('');
   const [prevUrl, setPrevUrl] = useState('');
   const [typeUrl] = useState('');
   const [loading, setLoading] = useState(true);
   const initialUrl = 'https://pokeapi.co/api/v2/pokemon';
-
   useEffect(() => {
     async function fetchData() {
+      setLoading(true);
       let response = await getAllPokemon(initialUrl);
       setNextUrl(response.next);
       setPrevUrl(response.previus);
-      // console.log(response);
-      await loadingPokemon(response.results);
+      await loadingPokemons(response.results);
+      //console.log(response.results);      
       setLoading(false);
     }
     fetchData();
@@ -29,7 +30,7 @@ function App() {
   const next = async () => {
     setLoading(true);
     let data = await getAllPokemon(nextUrl);
-    await loadingPokemon(data.results);
+    await loadingPokemons(data.results);
     setNextUrl(data.next);
     setPrevUrl(data.previous);
     setLoading(false);
@@ -41,18 +42,27 @@ function App() {
     }
     setLoading(true);
     let data = await getAllPokemon(prevUrl);
-    await loadingPokemon(data.results);
+    await loadingPokemons(data.results);
     setNextUrl(data.next);
     setPrevUrl(data.previous);
     setLoading(false);
   }
 
-  const loadingPokemon = async (data) => {
+  const getPokemonUrl = async (event) => {
+    let pokemonUrl = initialUrl + '/' + (event);
+    let response = await getPokemon(pokemonUrl);
+    await loadingPokemon(response);
+  }
+  const loadingPokemon = (data) => {
+    setPokemonData(data)
+  }
+
+  const loadingPokemons = async (data) => {
     let _pokemon = await Promise.all(data.map(async pokemon => {
       let pokemonRecord = await getAllPokemon(pokemon.url);
       return pokemonRecord
     }))
-    setPokemonData(_pokemon)
+    setPokemonsData(_pokemon)
   }
   return (
     <div>
@@ -60,19 +70,39 @@ function App() {
         <>
           <Navbar />
           <Searchbar />
-          <div className="btn">
-            <button onClick={prev}>Prev</button>
-            <button onClick={next}>Next</button>
-          </div>
-          <div className="grid-container">
-            {pokemonData.map((pokemon, i) => {
-              return <Card key={pokemon.id} pokemon={pokemon} />
-            })}
-          </div>
-          <div className="btn">
-            <button onClick={prev}>Prev</button>
-            <button onClick={next}>Next</button>
-          </div>
+          {pokemonData ?
+            <div className="grid-container">
+              <div key={pokemonData.id}>
+                <Card pokemon={pokemonData} full='yes' />
+                <div className="btn btn-info" >
+
+                </div>
+              </div>
+            </div>
+            : (
+              <>
+                <div className="btn">
+                  <button onClick={prev}>Prev</button>
+                  <button onClick={next}>Next</button>
+                </div>
+                <div className="grid-container">
+                  {pokemonsData.map((pokemon, i) => {
+                    return (
+                      <div key={pokemon.id}>
+                        <Card pokemon={pokemon} />
+                        <div className="btn btn-info" >
+                          <button value={pokemon.id} key={i} onClick={() => getPokemonUrl(pokemon.id)}>Read More</button>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+                <div className="btn">
+                  <button onClick={prev}>Prev</button>
+                  <button onClick={next}>Next</button>
+                </div>
+              </>
+            )}
         </>
       )}
     </div>
