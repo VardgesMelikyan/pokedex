@@ -6,6 +6,7 @@ import './style.css';
 function Slider(props) {
     const autoplay = props.autoplay;
     const pokemonImg = props.pokemonImg;
+    const frontImg = `https://pokeres.bastionbot.org/images/pokemon/${props.id}.png`
     return (
         <Carousel
             autoPlay={autoplay}
@@ -15,6 +16,9 @@ function Slider(props) {
             showStatus={false}
             stopOnHover
         >
+            <div className="carouselImg">
+                <img src={frontImg} />
+            </div>
             <div className="carouselImg">
                 <img src={pokemonImg.front_default} />
             </div>

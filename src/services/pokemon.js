@@ -21,10 +21,7 @@ function fetchPokemonData(pokemon) {
     fetch(url)
         .then(response => response.json())
         .then(pokeData => {
-            return (
-                <div> Hello</div>
-                // {pokeData}
-            );
+            return pokeData;
         })
 }
 
