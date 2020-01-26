@@ -1,0 +1,12 @@
+.carousel .slide{
+    background-color: #fff;
+}
+.carousel .control-prev.control-arrow:before{
+    border-right: 8px solid #0c0c0c;
+}
+.carousel .control-next.control-arrow:before{
+    border-left: 8px solid #0c0c0c;
+}
+.carousel.carousel-slider .control-arrow:hover{
+    background: transparent;
+}
