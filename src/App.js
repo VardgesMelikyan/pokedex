@@ -68,7 +68,17 @@ function App() {
           <Navbar />
           <Searchbar />
           <div className="grid-container">
-
+            {pokemonsData.map((pokemon, i) => {
+              return (
+                <div key={pokemon.id}>
+                  <Card pokemon={pokemon} />
+                  <div className="btn btn-info" >
+                    <a href={'pokemon/' + pokemon.id} key={i}>Read More</a>
+                  </div>
+                </div>
+              );
+            })
+            }
           </div>
         </>
       )}
@@ -77,14 +87,3 @@ function App() {
 }
 
 export default App;
-// {pokemonsData.map((pokemon, i) => {
-//               return (
-//                 <div key={pokemon.id}>
-//                   <Card pokemon={pokemon} />
-//                   <div className="btn btn-info" >
-//                     <a href={'pokemon/' + pokemon.id} key={i}>Read More</a>
-//                   </div>
-//                 </div>
-//               );
-//             })
-//             }
