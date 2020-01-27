@@ -6,6 +6,7 @@ import Navbar from './components/Navbar';
 import Searchbar from './components/Searchbar';
 import Paginations from './components/Pagination';
 import './App.css';
+
 function App() {
   const [pokemonsData, setPokemonsData] = useState([]);
   const [nextUrl, setNextUrl] = useState('');
@@ -18,12 +19,12 @@ function App() {
       setLoading(true);
       await axios.get(initialUrl).then(res => {
         if (res.data.results) {
-          res.data.results.forEach(async pokemon => {
-            await axios.get(pokemon.url).then(data => {
+          res.data.results.map(async pokemon => {
+            await axios.get(pokemon.url).then(async data => {
               setPokemonsData(data.data);
-
             })
           })
+
         } else {
           setPokemonsData(res.data)
           setNextUrl(res.data.id + 1);
@@ -38,7 +39,6 @@ function App() {
     }
     fetchData();
   }, [initialUrl])
-  console.log(pokemonsData)
   // const next = async () => {
   //   setLoading(true);
   //   let data = await getAllPokemon(nextUrl);
@@ -58,8 +58,9 @@ function App() {
   //   setPrevUrl(data.previous);
   //   setLoading(false);
   // }
+
+  console.log(pokemonsData)
   return (
-    // <div></div>
     <div>
       {loading ? <h1>Loading...</h1> : (
         <>
@@ -67,18 +68,7 @@ function App() {
           <Navbar />
           <Searchbar />
           <div className="grid-container">
-            {pokemonsData.map((pokemon, i) => {
-              console.log(pokemon)
-              return (
-                <div key={pokemon.id}>
-                  {/* <Card pokemon={pokemon} /> */}
-                  <div className="btn btn-info" >
-                    <a href={'pokemon/' + pokemon.id} key={i}>Read More</a>
-                  </div>
-                </div>
-              );
-            })
-            }
+
           </div>
         </>
       )}
@@ -87,3 +77,14 @@ function App() {
 }
 
 export default App;
+// {pokemonsData.map((pokemon, i) => {
+//               return (
+//                 <div key={pokemon.id}>
+//                   <Card pokemon={pokemon} />
+//                   <div className="btn btn-info" >
+//                     <a href={'pokemon/' + pokemon.id} key={i}>Read More</a>
+//                   </div>
+//                 </div>
+//               );
+//             })
+//             }

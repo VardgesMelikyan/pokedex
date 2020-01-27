@@ -11,7 +11,6 @@ const buttonStyles = {
 };
 
 const PaginacionTabla = ({ itemsperpage, nocolumns, items, pagesspan }) => {
-    console.log(itemsperpage, nocolumns, items, pagesspan)
     return (
         <ReactNextPaging
             itemsperpage={itemsperpage}

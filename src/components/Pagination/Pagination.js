@@ -2,7 +2,7 @@ import React, { useState, Component } from "react";
 import ReactDOM from "react-dom";
 import PaginacionTabla from "./PaginacionTabla";
 
-function Paginations() {
+function Paginations(pokemon) {
     return (
         <table className="table table-hover">
             <PaginacionTabla
