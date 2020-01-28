@@ -1,11 +1,7 @@
 import React, { useState } from 'react';
 
-export async function getAllPokemon(url) {
-    return new Promise((resolve, reject) => {
-        fetch(url)
-            .then(res => res.json())
-            .then(data => {
-                resolve(data);
-            })
-    })
+export async function PokemonsData(url) {
+    const res = await fetch(url)
+    const body = await res.json();
+    return body
 }

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { getAllPokemon } from './services/pokemon';
+import { PokemonsData } from './services/pokemon';
 import Card from './components/Card';
 import Navbar from './components/Navbar';
 import Searchbar from './components/Searchbar';
@@ -17,25 +17,23 @@ function App() {
   useEffect(() => {
     async function fetchData() {
       setLoading(true);
-      let response = await getAllPokemon(initialUrl);
-      if (response.results) {
-        await loadingPokemon(response.results);
-      } else {
-        setPokemonsData(response);
-      }
+      PokemonsData(initialUrl)
+        .then((body) => {
+          if (body.results) {
+            body.results.map((url) => {
+              PokemonsData(url.url)
+                .then((data) => {
+                  setPokemonsData(data)
+                })
+            })
+          } else (
+            setPokemonsData(body)
+          )
+        })
       setLoading(false);
     }
     fetchData()
-  }, [api])
-
-  const loadingPokemon = async (data) => {
-    let _pokemon = await Promise.all(data.map(async pokemon => {
-      let pokemonRecord = await getAllPokemon(pokemon.url);
-      return pokemonRecord
-    }))
-    setPokemonsData(_pokemon)
-  }
-
+  }, [initialUrl])
   // const next = async () => {
   //   setLoading(true);
   //   let data = await getAllPokemon(nextUrl);
@@ -61,6 +59,7 @@ function App() {
     <div>
       {loading ? <h1>Loading...</h1> : (
         <>
+          <Paginations pokemon={''} />
           <Navbar />
           <Searchbar />
           <div className="grid-container">
