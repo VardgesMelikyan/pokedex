@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import typeColors from '../../../Helper/pokemonTypes';
 import TypeInfo from './TypeInfo';
 import './style.css';

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { fetchKantoPokemon } from './services/pokemon';
+import { getAllPokemon } from './services/pokemon';
 import Card from './components/Card';
 import Navbar from './components/Navbar';
 import Searchbar from './components/Searchbar';
@@ -12,33 +12,30 @@ function App() {
   const [nextUrl, setNextUrl] = useState('');
   const [prevUrl, setPrevUrl] = useState('');
   const [loading, setLoading] = useState(true);
-  const [api, setApi] = useState('pokemon/1');
+  const [api, setApi] = useState('pokemon');
   const initialUrl = `https://pokeapi.co/api/v2/${api}`;
   useEffect(() => {
     async function fetchData() {
       setLoading(true);
-      await axios.get(initialUrl).then(res => {
-        if (res.data.results) {
-          res.data.results.map(async pokemon => {
-            await axios.get(pokemon.url).then(async data => {
-              setPokemonsData(data.data);
-            })
-          })
-
-        } else {
-          setPokemonsData(res.data)
-          setNextUrl(res.data.id + 1);
-          if (res.data.id > 1) {
-            setPrevUrl(res.data.id - 1);
-          } else {
-            setPrevUrl(res.data.id)
-          }
-        }
-        setLoading(false);
-      })
+      let response = await getAllPokemon(initialUrl);
+      if (response.results) {
+        await loadingPokemon(response.results);
+      } else {
+        setPokemonsData(response);
+      }
+      setLoading(false);
     }
-    fetchData();
-  }, [initialUrl])
+    fetchData()
+  }, [api])
+
+  const loadingPokemon = async (data) => {
+    let _pokemon = await Promise.all(data.map(async pokemon => {
+      let pokemonRecord = await getAllPokemon(pokemon.url);
+      return pokemonRecord
+    }))
+    setPokemonsData(_pokemon)
+  }
+
   // const next = async () => {
   //   setLoading(true);
   //   let data = await getAllPokemon(nextUrl);
@@ -64,7 +61,6 @@ function App() {
     <div>
       {loading ? <h1>Loading...</h1> : (
         <>
-          <Paginations pokemon={''} />
           <Navbar />
           <Searchbar />
           <div className="grid-container">
@@ -73,7 +69,7 @@ function App() {
                 <div key={pokemon.id}>
                   <Card pokemon={pokemon} />
                   <div className="btn btn-info" >
-                    <a href={'pokemon/' + pokemon.id} key={i}>Read More</a>
+                    <a href={'pokemon/' + pokemon.id} key={pokemon.id}>Read More</a>
                   </div>
                 </div>
               );
