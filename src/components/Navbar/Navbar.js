@@ -3,7 +3,8 @@ import './Style.css';
 function Navbar() {
     return (
         <div className="Navbar">
-            Pokemon API
+            <h3>Pokemon API</h3>
+            <a href="/"> Pokedex </a>
         </div>
     );
 }

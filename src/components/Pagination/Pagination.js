@@ -8,7 +8,7 @@ function Paginations(pokemon) {
             <PaginacionTabla
                 itemsperpage={10}
                 nocolumns={20}
-                items={[]}
+                items={pokemon}
                 pagesspan={4}
             />
         </table>

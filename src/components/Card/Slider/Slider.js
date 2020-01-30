@@ -17,19 +17,19 @@ function Slider(props) {
             stopOnHover
         >
             <div className="carouselImg">
-                <img src={frontImg} alt={frontImg} />
+                <img className="card-img-top" src={frontImg} alt={frontImg} />
             </div>
             <div className="carouselImg">
-                <img src={pokemonImg.front_default} alt={pokemonImg.front_default} />
+                <img className="card-img-top" src={pokemonImg.front_default} alt={pokemonImg.front_default} />
             </div>
             <div className="carouselImg">
-                <img src={pokemonImg.back_default} alt={pokemonImg.back_default} />
+                <img className="card-img-top" src={pokemonImg.back_default} alt={pokemonImg.back_default} />
             </div>
             <div className="carouselImg">
-                <img src={props.pokemonImg.front_shiny} alt={props.pokemonImg.front_shiny} />
+                <img className="card-img-top" src={props.pokemonImg.front_shiny} alt={props.pokemonImg.front_shiny} />
             </div>
             <div className="carouselImg">
-                <img src={props.pokemonImg.back_shiny} alt={props.pokemonImg.back_shiny} />
+                <img className="card-img-top" src={props.pokemonImg.back_shiny} alt={props.pokemonImg.back_shiny} />
             </div>
         </Carousel>
     );

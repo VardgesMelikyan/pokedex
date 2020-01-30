@@ -1,39 +1,46 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import { PokemonsData } from './services/pokemon';
 import Card from './components/Card';
 import Navbar from './components/Navbar';
 import Searchbar from './components/Searchbar';
-import Paginations from './components/Pagination';
+import SingleCard from './components/Card/SingleCard';
+// import Paginations from './components/Pagination';
 import './App.css';
 
 function App() {
   const [pokemonsData, setPokemonsData] = useState([]);
-  const [nextUrl, setNextUrl] = useState('');
-  const [prevUrl, setPrevUrl] = useState('');
+  // const [nextUrl, setNextUrl] = useState('');
+  // const [prevUrl, setPrevUrl] = useState('');
   const [loading, setLoading] = useState(true);
-  const [api, setApi] = useState('pokemon');
-  const initialUrl = `https://pokeapi.co/api/v2/${api}`;
+  const [api] = useState(window.location.pathname.split('/')[1] ? window.location.pathname.split('/')[1] : 'pokemon');
+  const [typeName] = useState((window.location.pathname.split('/')[2] ? window.location.pathname.split('/')[2] : ''));
+  const initialUrl = `https://pokeapi.co/api/v2/${api}/${typeName}`;
   useEffect(() => {
     async function fetchData() {
       setLoading(true);
-      PokemonsData(initialUrl)
-        .then((body) => {
-          if (body.results) {
-            body.results.map((url) => {
-              PokemonsData(url.url)
-                .then((data) => {
-                  setPokemonsData(data)
-                })
+      switch (api) {
+        case 'pokemon':
+          await PokemonsData(initialUrl)
+            .then(body => {
+              if (!typeName) {
+                setPokemonsData([body.results, api])
+              } else {
+                setPokemonsData([body, `single${api}`])
+              }
             })
-          } else (
-            setPokemonsData(body)
-          )
-        })
+          break;
+        case 'type':
+          await PokemonsData(initialUrl)
+            .then(body => {
+              setPokemonsData([body.pokemon, api])
+            })
+          break;
+        default:
+      }
       setLoading(false);
     }
     fetchData()
-  }, [initialUrl])
+  }, [])
   // const next = async () => {
   //   setLoading(true);
   //   let data = await getAllPokemon(nextUrl);
@@ -53,28 +60,36 @@ function App() {
   //   setPrevUrl(data.previous);
   //   setLoading(false);
   // }
-
-  console.log(pokemonsData)
+  if (!pokemonsData) {
+    return
+  }
+  console.log('ok')
   return (
     <div>
       {loading ? <h1>Loading...</h1> : (
         <>
-          <Paginations pokemon={''} />
+          {/* <Paginations pokemon={pokemonsData} /> */}
           <Navbar />
-          <Searchbar />
+          <Searchbar pokemon={pokemonsData} />
           <div className="grid-container">
-            {pokemonsData.map((pokemon, i) => {
-              return (
-                <div key={pokemon.id}>
-                  <Card pokemon={pokemon} />
-                  <div className="btn btn-info" >
-                    <a href={'pokemon/' + pokemon.id} key={pokemon.id}>Read More</a>
-                  </div>
-                </div>
-              );
-            })
+            {
+              pokemonsData[1] === 'pokemon' ? (
+                pokemonsData[0].map((p, i) => {
+                  return <Card key={i} pokemon={p.url} />
+                })) : ''
+            }
+            {
+              pokemonsData[1] === 'type' ?
+                (pokemonsData[0].map((p, i) => {
+                  return <Card key={i} pokemon={p.pokemon.url} />
+                })) : ''
             }
           </div>
+          {
+            pokemonsData[1] === 'singlepokemon' ?
+              <SingleCard pokemon={pokemonsData[0]} />
+              : ''
+          }
         </>
       )}
     </div>

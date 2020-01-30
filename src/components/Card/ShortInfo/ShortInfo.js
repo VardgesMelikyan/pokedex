@@ -19,16 +19,18 @@ export default function ShortInfo(props) {
                 </tbody>
             </table>
 
-            <div className="Card__data Card__data__ability">
-                <p className="title"> Ability </p>
-                {props.abilities.map((ability, i) => {
-                    return (
+            <div className="Card__data Card__data__ability ">
+                <h3 className="title text-center"> Ability </h3>
+                <div className="d-flex justify-content-around">
+                    {props.abilities.map((ability, i) => {
+                        return (
 
-                        <p className="Card__data__ability__info" key={i}>
-                            {' '}{ability.ability.name}
-                        </p>
-                    )
-                })}
+                            <p className="Card__data__ability__info" key={i}>
+                                {' '}{ability.ability.name}
+                            </p>
+                        )
+                    })}
+                </div>
             </div>
         </div>
     );
