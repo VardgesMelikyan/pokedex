@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Select from 'react-select'
 import makeAnimated from 'react-select/animated';
-import { PokemonData } from '../../services/pokemon'
+import { PokemonsData } from '../../services/pokemon'
 import './style.css';
 
 function Searchbar() {
@@ -9,7 +9,7 @@ function Searchbar() {
     const [selectedOption, setSelectedOption] = useState(null)
     const [typeFilter, setTypeFilter] = useState([]);
     useEffect(() => {
-        PokemonData('https://pokeapi.co/api/v2/type')
+        PokemonsData('https://pokeapi.co/api/v2/type')
             .then(body => {
                 setTypeFilter(filterData(body.results))
             });
@@ -26,7 +26,7 @@ function Searchbar() {
 
     const handleChange = (selectedOption) => {
         setSelectedOption({ selectedOption });
-        // console.log(`Option selected:`, selectedOption);
+        console.log(`Option selected:`, selectedOption);
     }
 
     // const { selectedOption } = setSelectedOption;

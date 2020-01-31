@@ -6,9 +6,9 @@ import ChartsPage from './Charts'
 import Card from '../../Card'
 import './style.css';
 
-function SingleCard(pokemon) {
-    const data = pokemon.pokemon
-    if (!pokemon) {
+function SingleCard(props) {
+    const data = props.pokemon
+    if (!props.pokemon) {
         return
     }
     const randomCard = () => {
@@ -17,7 +17,15 @@ function SingleCard(pokemon) {
     }
     return (
         <div className="container">
-            <Name name={data.name} />
+            <div className="row">
+                <div className="col-md">
+                    <a href={`${data.id !== 1 ? data.id - 1 : ''}`} onClick={() => props.prev()} className="btn btn-primary">Prev</a>
+                </div>
+                <div className="col-md">
+                    <a href={`${data.id + 1}`} onClick={() => props.next()} className="btn btn-primary">Next</a>
+                </div>
+            </div>
+            <Name name={data.name} pokemonId={data.id} />
             <div className="row">
                 <div className="col-md-4">
                     <Slider pokemonImg={data.sprites} id={data.id} autoplay={true} />

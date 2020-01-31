@@ -1,10 +1,10 @@
 import React from 'react';
 import './style.css';
 
-function Name(name) {
+function Name(props) {
     return (
         <div className="h2 d-flex justify-content-around">
-            <h5 className="card-title"><a className="text-uppercase" href={`/pokemon/${name.name}`} >{name.name}</a></h5>
+            <h5 className="card-title"><a className="text-uppercase" href={`/pokemon/${props.pokemonId}`} >{props.name}</a></h5>
         </div>
     );
 }
